@@ -11,8 +11,8 @@ documentation = "https://rcore-os.github.io/arceos/driver_virtio/index.html"
 
 [features]
 block = []
-net = ["driver_net"]
-gpu = ["driver_display"]
+#net = ["driver_net"]
+#gpu = ["driver_display"]
 default = ["block"]
 
 [dependencies]

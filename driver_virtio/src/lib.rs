@@ -15,7 +15,7 @@
 #![feature(doc_auto_cfg)]
 
 #[cfg(feature = "block")]
-mod blk;
+pub mod blk;
 #[cfg(feature = "gpu")]
 mod gpu;
 #[cfg(feature = "net")]

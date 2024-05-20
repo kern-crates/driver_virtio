@@ -9,7 +9,7 @@ edition = "2021"
 arch_boot = { git = "ssh://git@github.com/shilei-massclouds/arch_boot.git" }
 early_console = { git = "ssh://git@github.com/shilei-massclouds/early_console.git" }
 driver_block = { git = "ssh://git@github.com/shilei-massclouds/driver_block.git" }
-driver_virtio = { git = "ssh://git@github.com/shilei-massclouds/driver_block.git" }
+driver_virtio = { git = "ssh://git@github.com/shilei-massclouds/driver_virtio.git" }
 driver_common = { git = "ssh://git@github.com/shilei-massclouds/driver_common.git" }
 axlog2 = { git = "ssh://git@github.com/shilei-massclouds/axlog2.git" }
 axconfig = { git = "ssh://git@github.com/shilei-massclouds/axconfig.git" }
@@ -17,3 +17,4 @@ axconfig = { git = "ssh://git@github.com/shilei-massclouds/axconfig.git" }
 axtype = { git = "ssh://git@github.com/shilei-massclouds/axtype.git" }
 axhal = { git = "ssh://git@github.com/shilei-massclouds/axhal.git" }
 axalloc = { git = "ssh://git@github.com/shilei-massclouds/axalloc.git" }
+axdriver = { git = "ssh://git@github.com/shilei-massclouds/axdriver.git" }
