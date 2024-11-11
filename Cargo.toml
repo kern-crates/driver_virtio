@@ -1,0 +1,9 @@
+[workspace]
+resolver = "2"
+members = [
+    "driver_virtio",
+    "rt_driver_virtio",
+]
+
+[profile.release]
+lto = true

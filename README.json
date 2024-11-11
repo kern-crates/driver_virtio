@@ -1,0 +1,11 @@
+{
+  "name": "driver_virtio",
+  "description": "VirtIO block driver for lkmodel.",
+  "authors": [{
+    "name": "Shi Lei",
+    "email": "shi_lei@massclouds.com"
+  }],
+  "keywords": ["virtio", "block", "driver"],
+  "repo": "shilei-massclouds/driver_virtio",
+  "doc_url": "https://github.com/shilei-massclouds/driver_virtio/blob/main/README.md"
+}

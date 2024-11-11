@@ -1,4 +1,5 @@
 #![no_std]
+#![no_main]
 
 #[macro_use]
 extern crate axlog2;
@@ -6,25 +7,22 @@ extern crate alloc;
 use alloc::vec;
 
 use core::panic::PanicInfo;
-use axtype::{align_up_4k, align_down_4k, phys_to_virt, virt_to_phys};
 use driver_common::{BaseDriverOps, DeviceType};
-use driver_block::{ramdisk, BlockDriverOps};
-use driver_virtio::blk::VirtIoBlkDev;
-use axhal::mem::memory_regions;
+use driver_block::BlockDriverOps;
 
-const DISK_SIZE: usize = 0x400_0000;    // 64M
+const DISK_SIZE: usize = 0x1000_0000;    // 256M
 const BLOCK_SIZE: usize = 0x200;        // 512
 
 /// Entry
 #[no_mangle]
-pub extern "Rust" fn runtime_main(_cpu_id: usize, _dtb_pa: usize) {
-    axlog2::init();
-    axlog2::set_max_level("debug");
+pub extern "Rust" fn runtime_main(cpu_id: usize, _dtb_pa: usize) {
+    axlog2::init("debug");
     info!("[rt_driver_virtio]: ...");
 
-    let start = align_up_4k(virt_to_phys(_ekernel as usize));
-    let end = align_down_4k(axconfig::PHYS_MEMORY_END);
-    axalloc::global_init(phys_to_virt(start), end - start);
+    axhal::arch_init_early(cpu_id);
+
+    info!("Initialize global memory allocator...");
+    axalloc::init();
 
     info!("Found physcial memory regions:");
     for r in axhal::mem::memory_regions() {
@@ -38,9 +36,9 @@ pub extern "Rust" fn runtime_main(_cpu_id: usize, _dtb_pa: usize) {
     }
 
     info!("Initialize kernel page table...");
-    remap_kernel_memory().expect("remap kernel memoy failed");
+    page_table::init();
 
-    let mut alldevs = axdriver::init_drivers();
+    let mut alldevs = axdriver::init_drivers2();
     let mut disk = alldevs.block.take_one().unwrap();
 
     assert_eq!(disk.device_type(), DeviceType::Block);
@@ -68,31 +66,8 @@ pub extern "Rust" fn runtime_main(_cpu_id: usize, _dtb_pa: usize) {
     axhal::misc::terminate();
 }
 
-fn remap_kernel_memory() -> Result<(), axhal::paging::PagingError> {
-    use axhal::paging::PageTable;
-    use axhal::paging::{reuse_page_table_root, setup_page_table_root};
-    use axhal::mem::phys_to_virt;
-
-    let mut kernel_page_table = PageTable::try_new()?;
-    for r in memory_regions() {
-        kernel_page_table.map_region(
-            phys_to_virt(r.paddr),
-            r.paddr,
-            r.size,
-            r.flags.into(),
-            true,
-        )?;
-    }
-    setup_page_table_root(kernel_page_table);
-
-    Ok(())
-}
-
+#[panic_handler]
 pub fn panic(info: &PanicInfo) -> ! {
     error!("{}", info);
     arch_boot::panic(info)
-}
-
-extern "C" {
-    fn _ekernel();
 }

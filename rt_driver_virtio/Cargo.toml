@@ -18,3 +18,4 @@ axtype = { git = "ssh://git@github.com/shilei-massclouds/axtype.git" }
 axhal = { git = "ssh://git@github.com/shilei-massclouds/axhal.git" }
 axalloc = { git = "ssh://git@github.com/shilei-massclouds/axalloc.git" }
 axdriver = { git = "ssh://git@github.com/shilei-massclouds/axdriver.git" }
+page_table = { git = "ssh://git@github.com/shilei-massclouds/page_table" }
